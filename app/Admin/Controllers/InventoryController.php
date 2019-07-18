@@ -156,7 +156,7 @@ class InventoryController extends Controller
 
         $form->deleting(function () {
 
-            $itemid = str_replace('admin/inventory/inventory/', '', request()->path());
+            $itemid = str_replace('juan/inventory/inventory/', '', request()->path());
 
             $borrowed = Borrowed::where('item_id', $itemid)->first();
 

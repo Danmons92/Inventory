@@ -135,7 +135,7 @@ class CategoryController extends Controller
         
         $form->deleting(function () {
 
-            $categoryid = str_replace('admin/inventory/category/', '', request()->path());
+            $categoryid = str_replace('juan/inventory/category/', '', request()->path());
 
             $inventory = Inventory::where('category_id', $categoryid)->first();
 

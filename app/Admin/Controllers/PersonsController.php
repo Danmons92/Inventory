@@ -145,7 +145,7 @@ class PersonsController extends Controller
         
         $form->deleting(function () {
 
-            $userid = str_replace('admin/inventory/users/', '', request()->path());
+            $userid = str_replace('juan/inventory/users/', '', request()->path());
 
             $borrowed = Borrowed::where('person_id', $userid)->first();
 

@@ -136,7 +136,7 @@ class WarehouseController extends Controller
         
         $form->deleting(function () {
 
-            $whid = str_replace('admin/inventory/warehouse/', '', request()->path());
+            $whid = str_replace('juan/inventory/warehouse/', '', request()->path());
 
             $inventory = Inventory::where('warehouse_id', $whid)->first();
 
