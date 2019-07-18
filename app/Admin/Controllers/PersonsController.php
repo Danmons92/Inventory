@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Persons;
+use App\Borrowed;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -133,6 +134,29 @@ class PersonsController extends Controller
         $form->text('last_name', 'Apellido');
         $form->mobile('phone', 'Telefono');
         $form->text('address', 'Direccion');
+
+        $form->tools(function ($tools) {
+			$tools->disableDelete();
+			$tools->disableView();
+		});
+		$form->disableViewCheck();
+		$form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        
+        $form->deleting(function () {
+
+            $userid = str_replace('admin/inventory/users/', '', request()->path());
+
+            $borrowed = Borrowed::where('person_id', $userid)->first();
+
+           if ($borrowed) {
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'No se puede eliminar. Existe(n) registro(s) con esta persona en Prestamos',
+            ]);
+        }
+        });
 
         return $form;
     }

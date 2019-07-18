@@ -11,6 +11,7 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Show;
+use Illuminate\Support\MessageBag;
 
 class BorrowedController extends Controller
 {
@@ -132,12 +133,36 @@ class BorrowedController extends Controller
 
         $form->text('description', 'Nota');
 
+        $form->tools(function ($tools) {
+			$tools->disableDelete();
+			$tools->disableView();
+		});
+		$form->disableViewCheck();
+		$form->disableEditingCheck();
+		$form->disableCreatingCheck();
+
+
         $form->saving(function (Form $form) {
+
+            $borrowed = Borrowed::where('item_id', $form->item_id)->first();
+
+            \Debugbar::info($borrowed);
+
+            if ($borrowed) {
+                $error = new MessageBag([
+                    'title'   => 'Error...',
+                    'message' => 'Este articulo ya ha sido prestado. ',
+                ]);
             
+                return back()->with(compact('error'));
+            }
+            
+
 
             
         });
 
         return $form;
     }
+
 }
