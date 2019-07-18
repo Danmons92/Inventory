@@ -18,7 +18,7 @@ class HomeController extends Controller
             ->row(function (Row $row) {
 
                $row->column(4, function (Column $column) {
-                        $column->append(Dashboard::infoUser());
+                        $column->append(Dashboard::infoInv());
                     });
 
             });
