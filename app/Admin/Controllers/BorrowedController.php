@@ -146,8 +146,6 @@ class BorrowedController extends Controller
 
             $borrowed = Borrowed::where('item_id', $form->item_id)->first();
 
-            \Debugbar::info($borrowed);
-
             if ($borrowed) {
                 $error = new MessageBag([
                     'title'   => 'Error...',
