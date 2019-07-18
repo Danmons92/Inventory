@@ -11,7 +11,7 @@ return [
     | login page.
     |
     */
-    'name' => 'Laravel-admin',
+    'name' => 'Inventario',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     | Html title for all pages.
     |
     */
-    'title' => 'Admin',
+    'title' => 'Inventario',
 
     /*
     |--------------------------------------------------------------------------
@@ -200,6 +200,7 @@ return [
         'inventory_table'        => 'inventory',
         'borrowed_table'        => 'borrowed',
         'warehouse_table'        => 'warehouse',
+        'category_table'        => 'category',
     ],
 
     /*

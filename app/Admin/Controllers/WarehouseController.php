@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Warehouse;
+use App\Inventory;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -122,8 +123,31 @@ class WarehouseController extends Controller
     {
         $form = new Form(new Warehouse);
 
-        $form->text('address1', 'Direccion 1');
+        $form->text('address1', 'Direccion 1')->rules('required');
         $form->text('address2', 'Direccion 2');
+
+        $form->tools(function ($tools) {
+			$tools->disableDelete();
+			$tools->disableView();
+		});
+		$form->disableViewCheck();
+		$form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        
+        $form->deleting(function () {
+
+            $whid = str_replace('admin/inventory/warehouse/', '', request()->path());
+
+            $inventory = Inventory::where('warehouse_id', $whid)->first();
+
+           if ($inventory) {
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'No se puede eliminar. Existen articulos cargados con este almacen',
+            ]);
+        }
+        });
 
         return $form;
     }

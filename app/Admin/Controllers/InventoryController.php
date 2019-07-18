@@ -5,6 +5,7 @@ namespace App\Admin\Controllers;
 use App\Inventory;
 use App\Warehouse;
 use App\Category;
+use App\Borrowed;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -87,11 +88,8 @@ class InventoryController extends Controller
         $grid->description('Descripcion');
         $grid->warehouse()->address1('Almacen');
         $grid->img('Img')->lightbox(['zooming' => true, 'width' => 50, 'height' => 50, 'class' => 'rounded']);
-        $grid->qty('Cantidad');
         $grid->category()->name('Categoria');
         $grid->price('Precio(USD)');
-        $grid->status('Estado');
-        $grid->updated_at('Actualizado en');
 
         $grid->filter(function($filter){
 
@@ -124,10 +122,8 @@ class InventoryController extends Controller
         $show->description('Descripcion');
         $show->warehouse()->address1('Almacen');
         $show->img('Img');
-        $show->qty('Cantidad');
         $show->category()->name('Categoria');
         $show->price('Precio(USD)');
-        $show->status('Estado');
         $show->created_at('Created at');
         $show->updated_at('Updated at');
 
@@ -147,11 +143,31 @@ class InventoryController extends Controller
         $form->text('description', 'Descripcion');
         $form->select('warehouse_id', 'Almacen')->rules('required')->options(Warehouse::orderBy('address1', 'asc')->pluck('address1', 'id'));
         $form->image('img', 'Img');
-        $form->number('qty', 'Cantidad');
         $form->select('category_id', 'Categoria')->rules('required')->options(Category::orderBy('name', 'asc')->pluck('name', 'id'));
         $form->number('price', 'Precio(USD)');
-        $form->text('status', 'Estado');
 
+        $form->tools(function ($tools) {
+			$tools->disableDelete();
+			$tools->disableView();
+		});
+		$form->disableViewCheck();
+		$form->disableEditingCheck();
+		$form->disableCreatingCheck();
+
+        $form->deleting(function () {
+
+            $itemid = str_replace('admin/inventory/inventory/', '', request()->path());
+
+            $borrowed = Borrowed::where('item_id', $itemid)->first();
+
+           if ($borrowed) {
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'No puedes borrar un articulo que ya este prestado',
+            ]);
+        }
+        });
 
         return $form;
     }

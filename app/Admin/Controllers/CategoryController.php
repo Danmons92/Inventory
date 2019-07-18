@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Category;
+use App\Inventory;
 use App\Http\Controllers\Controller;
 use Encore\Admin\Controllers\HasResourceActions;
 use Encore\Admin\Form;
@@ -121,8 +122,31 @@ class CategoryController extends Controller
     {
         $form = new Form(new Category);
 
-        $form->text('name', 'Nombre');
+        $form->text('name', 'Nombre')->rules('required');;
         $form->text('description', 'Descripcion');
+
+        $form->tools(function ($tools) {
+			$tools->disableDelete();
+			$tools->disableView();
+		});
+		$form->disableViewCheck();
+		$form->disableEditingCheck();
+        $form->disableCreatingCheck();
+        
+        $form->deleting(function () {
+
+            $categoryid = str_replace('admin/inventory/category/', '', request()->path());
+
+            $inventory = Inventory::where('category_id', $categoryid)->first();
+
+           if ($inventory) {
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'No se puede eliminar. Existen articulos cargados con esta categoria',
+            ]);
+        }
+        });
 
         return $form;
     }

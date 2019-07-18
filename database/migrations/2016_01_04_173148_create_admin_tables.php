@@ -98,44 +98,51 @@ class CreateAdminTables extends Migration
             $table->timestamps();
         });
 
-                //tablas externas
+                 //tablas externas
 
-        Schema::create(config('admin.database.persons_table'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 50);
-            $table->string('last_name', 60)->nullable();
-            $table->string('phone')->nullable();
-            $table->string('address')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create(config('admin.database.inventory_table'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 100);
-            $table->string('description', 400)->nullable();
-            $table->integer('warehouse_id')->nullable();
-            $table->string('img')->nullable();
-            $table->integer('qty')->nullable();
-            $table->integer('category')->nullable();
-            $table->integer('price')->nullable();
-            $table->string('status')->nullable();
-            $table->timestamps();
-        });
-
-         Schema::create(config('admin.database.borrowed_table'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('item_id');
-            $table->integer('person_id');
-            $table->string('description', 400)->nullable();
-            $table->timestamps();
-        });
-
-         Schema::create(config('admin.database.warehouse_table'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('addrress1');
-            $table->integer('addrress2')->nullable();
-            $table->timestamps();
-        });
+                 Schema::create(config('admin.database.persons_table'), function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->string('name');
+                    $table->string('last_name')->nullable();
+                    $table->string('phone')->nullable();
+                    $table->string('address')->nullable();
+                    $table->timestamps();
+                });
+        
+                Schema::create(config('admin.database.inventory_table'), function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->string('name');
+                    $table->string('description')->nullable();
+                    $table->integer('warehouse_id')->nullable();
+                    $table->string('img')->nullable();
+                    $table->integer('qty')->nullable();
+                    $table->integer('category_id')->nullable();
+                    $table->integer('price')->nullable();
+                    $table->string('status')->nullable();
+                    $table->timestamps();
+                });
+        
+                 Schema::create(config('admin.database.borrowed_table'), function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->integer('item_id');
+                    $table->integer('person_id');
+                    $table->string('description')->nullable();
+                    $table->timestamps();
+                });
+        
+                 Schema::create(config('admin.database.warehouse_table'), function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->string('address1');
+                    $table->string('address2')->nullable();
+                    $table->timestamps();
+                });
+        
+                 Schema::create(config('admin.database.category_table'), function (Blueprint $table) {
+                    $table->increments('id');
+                    $table->string('name');
+                    $table->string('description')->nullable();
+                    $table->timestamps();
+                });
     }
 
     /**
@@ -154,5 +161,10 @@ class CreateAdminTables extends Migration
         Schema::dropIfExists(config('admin.database.role_permissions_table'));
         Schema::dropIfExists(config('admin.database.role_menu_table'));
         Schema::dropIfExists(config('admin.database.operation_log_table'));
+        Schema::dropIfExists(config('admin.database.persons_table'));
+        Schema::dropIfExists(config('admin.database.inventory_table'));
+        Schema::dropIfExists(config('admin.database.borrowed_table'));
+        Schema::dropIfExists(config('admin.database.warehouse_table'));
+        Schema::dropIfExists(config('admin.database.category_table'));
     }
 }
